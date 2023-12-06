@@ -1,11 +1,38 @@
-applications:
-- name: SBRestApi
-  disk_quota: 1G
-  instances: 1
-  memory: 1G
-  path: target/SpringBoot-Rest-API.jar
-  routes:
-  - route: sbrestapi.cfapps.io
-  - route: myrestapi.cfapps.io
-  - route: testapi.cfapps.io
-  stack: cflinuxfs3
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: springbootdeploy
+spec:
+ replicas: 2
+ strategy: 
+    type: Recreate
+ selector: 
+   matchLabels: 
+     app: sbwebapp
+ template:
+  metadata:
+   name: mavenwebapppod
+   labels:
+     app: sbwebapp	 
+  spec: 
+    containers:
+    - name: sbwebappcontainer
+      image: hunjan/springboot
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: mavenwebappsvc
+spec:
+  type: LoadBalancer
+  selector:
+   app: mavenwebapp
+  ports:
+   - port: 80
+     targetPort: 8080
+     nodePort: 31439
+...
