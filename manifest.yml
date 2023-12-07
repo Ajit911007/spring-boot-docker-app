@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: springbootdeploy
+ name: sbringbootdeployment
 spec:
  replicas: 2
  strategy: 
     type: Recreate
  selector: 
    matchLabels: 
-     app: sbwebapp
+     app: springbootapp
  template:
   metadata:
-   name: mavenwebapppod
+   name: springbootapppod
    labels:
-     app: sbwebapp	 
+     app: springbootapp	 
   spec: 
     containers:
-    - name: sbwebappcontainer
+    - name: springbootappcontainer
       image: hunjan/springboot
       imagePullPolicy: Always
       ports:
@@ -26,11 +26,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
- name: mavenwebappsvc
+ name: springbootsvc
 spec:
   type: LoadBalancer
   selector:
-   app: sbwebapp
+   app: springbootapp
   ports:
    - port: 80
      targetPort: 8080
